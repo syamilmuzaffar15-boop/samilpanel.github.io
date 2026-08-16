@@ -33,8 +33,6 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .label-custom { color: #aa6a6a; font-weight: 500; font-size: 14px; margin-bottom: 6px; display: block; }
         .mb-3 { margin-bottom: 18px; }
-
-        /* ===== URL RESULT ===== */
         .result-box {
             background: #0a0505;
             border: 2px solid #00ff44;
@@ -44,45 +42,11 @@
             display: none;
             animation: fadeIn 0.5s ease;
         }
-        .result-box .label {
-            color: #6a4a4a;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .result-box .url {
-            color: #00ff44;
-            font-family: monospace;
-            font-size: 18px;
-            word-break: break-all;
-            margin: 6px 0 12px 0;
-        }
-        .result-box .btn-success-custom {
-            background: #00aa33;
-            border: none;
-            border-radius: 40px;
-            padding: 10px 20px;
-            font-weight: 600;
-            color: #000;
-            width: 100%;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 14px;
-        }
+        .result-box .label { color: #6a4a4a; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .result-box .url { color: #00ff44; font-family: monospace; font-size: 16px; word-break: break-all; margin: 6px 0 12px 0; }
+        .result-box .btn-success-custom { background: #00aa33; border: none; border-radius: 40px; padding: 10px 20px; font-weight: 600; color: #000; width: 100%; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; }
         .result-box .btn-success-custom:hover { background: #00dd44; transform: scale(1.02); }
-        .result-box .btn-success-custom i { margin-right: 8px; }
-        .result-box .btn-secondary-custom {
-            background: transparent;
-            border: 1px solid #4a3a3a;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            color: #6a4a4a;
-            width: 100%;
-            transition: 0.3s;
-            font-size: 13px;
-        }
+        .result-box .btn-secondary-custom { background: transparent; border: 1px solid #4a3a3a; border-radius: 40px; padding: 8px 16px; font-weight: 500; color: #6a4a4a; width: 100%; transition: 0.3s; font-size: 13px; }
         .result-box .btn-secondary-custom:hover { border-color: #ff1a1a; color: #ff1a1a; }
     </style>
 </head>
@@ -97,7 +61,6 @@
 
         <div class="alert-custom" id="alertMessage"></div>
 
-        <!-- FORM -->
         <form id="createForm">
             <div class="mb-3">
                 <label class="label-custom"><i class="bi bi-person"></i> Username</label>
@@ -120,7 +83,6 @@
             <i class="bi bi-arrow-repeat"></i> Creating account...
         </div>
 
-        <!-- ===== RESULT BOX ===== -->
         <div class="result-box" id="resultBox">
             <div class="label"><i class="bi bi-link"></i> PANEL URL AKUN</div>
             <div class="url" id="resultUrl">https://panel-xxxxx.vercel.app</div>
@@ -134,10 +96,6 @@
     </div>
 
     <script>
-        // ============================================================
-        // PTERODACTYL CREATE PANEL + AUTO GENERATE URL
-        // ============================================================
-
         const form = document.getElementById('createForm');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
@@ -148,7 +106,6 @@
         const resultBox = document.getElementById('resultBox');
         const resultUrl = document.getElementById('resultUrl');
 
-        // ===== GENERATE URL ACAK =====
         function generateRandomUrl(username) {
             const prefix = username ? username.toLowerCase().replace(/[^a-z0-9]/g, '') : 'panel';
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -156,20 +113,15 @@
             for (let i = 0; i < 4; i++) {
                 randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            const domains = ['vercel.app', 'netlify.app', 'onrender.com', 'herokuapp.com'];
-            const domain = domains[Math.floor(Math.random() * domains.length)];
-            return `https://${prefix}-${randomPart}.${domain}`;
+            return `https://${prefix}-${randomPart}.vercel.app/panel.html`;
         }
 
-        // ===== FORM SUBMIT =====
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
             const email = emailInput.value.trim();
 
-            // Validasi
             if (!username || username.length < 3) {
                 showAlert('Username minimal 3 karakter.', 'error');
                 return;
@@ -183,23 +135,19 @@
                 return;
             }
 
-            // Loading
             loading.style.display = 'block';
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> PROCESSING...';
             hideAlert();
             resultBox.style.display = 'none';
 
-            // Simulasi proses
             setTimeout(() => {
                 const success = Math.random() > 0.15;
-
                 loading.style.display = 'none';
                 createBtn.disabled = false;
                 createBtn.innerHTML = '<i class="bi bi-plus-circle"></i> CREATE';
 
                 if (success) {
-                    // Generate URL
                     const url = generateRandomUrl(username);
                     resultUrl.innerText = url;
                     resultBox.style.display = 'block';
@@ -213,13 +161,11 @@
             }, 2500);
         });
 
-        // ===== FUNGSI BUKA URL =====
         function openUrl() {
             const url = resultUrl.innerText;
             window.open(url, '_blank');
         }
 
-        // ===== FUNGSI COPY URL =====
         function copyResultUrl() {
             const url = resultUrl.innerText;
             navigator.clipboard.writeText(url).then(() => {
@@ -229,7 +175,6 @@
             });
         }
 
-        // ===== ALERT =====
         function showAlert(message, type) {
             alertMsg.className = 'alert-custom ' + type;
             alertMsg.innerHTML = message;
@@ -247,4 +192,4 @@
     </script>
 
 </body>
-    </html>
+                </html>
