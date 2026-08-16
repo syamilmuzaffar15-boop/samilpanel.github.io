@@ -30,14 +30,60 @@
         .alert-custom.error { display: block; background: #1a0a0a; border: 1px solid #ff1a1a; color: #ff4a4a; }
         .loading { display: none; text-align: center; color: #ffcc00; font-size: 14px; margin-top: 12px; }
         .loading i { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .label-custom { color: #aa6a6a; font-weight: 500; font-size: 14px; margin-bottom: 6px; display: block; }
         .mb-3 { margin-bottom: 18px; }
-        .url-box { background: #0a0505; border: 1px solid #2a1a1a; border-radius: 16px; padding: 14px; margin-bottom: 16px; }
-        .url-box .label { color: #6a4a4a; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .url-box .url { color: #00ff44; font-family: monospace; font-size: 16px; word-break: break-all; margin-top: 4px; }
-        .url-box .btn-copy { background: transparent; border: 1px solid #ff1a1a; color: #ff1a1a; border-radius: 30px; padding: 2px 16px; font-size: 12px; transition: 0.3s; }
-        .url-box .btn-copy:hover { background: #ff1a1a; color: #000; }
+
+        /* ===== URL RESULT ===== */
+        .result-box {
+            background: #0a0505;
+            border: 2px solid #00ff44;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .result-box .label {
+            color: #6a4a4a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .result-box .url {
+            color: #00ff44;
+            font-family: monospace;
+            font-size: 18px;
+            word-break: break-all;
+            margin: 6px 0 12px 0;
+        }
+        .result-box .btn-success-custom {
+            background: #00aa33;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: #000;
+            width: 100%;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+        .result-box .btn-success-custom:hover { background: #00dd44; transform: scale(1.02); }
+        .result-box .btn-success-custom i { margin-right: 8px; }
+        .result-box .btn-secondary-custom {
+            background: transparent;
+            border: 1px solid #4a3a3a;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-weight: 500;
+            color: #6a4a4a;
+            width: 100%;
+            transition: 0.3s;
+            font-size: 13px;
+        }
+        .result-box .btn-secondary-custom:hover { border-color: #ff1a1a; color: #ff1a1a; }
     </style>
 </head>
 <body>
@@ -49,17 +95,9 @@
             <p>Pterodactyl Account Creator</p>
         </div>
 
-        <!-- URL OTOMATIS -->
-        <div class="url-box">
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="label"><i class="bi bi-link"></i> PANEL URL (OTOMATIS)</span>
-                <button onclick="copyUrl()" class="btn-copy"><i class="bi bi-clipboard"></i> COPY</button>
-            </div>
-            <div class="url" id="panelUrlDisplay">https://panel-xxxxx.vercel.app</div>
-        </div>
-
         <div class="alert-custom" id="alertMessage"></div>
 
+        <!-- FORM -->
         <form id="createForm">
             <div class="mb-3">
                 <label class="label-custom"><i class="bi bi-person"></i> Username</label>
@@ -82,6 +120,14 @@
             <i class="bi bi-arrow-repeat"></i> Creating account...
         </div>
 
+        <!-- ===== RESULT BOX ===== -->
+        <div class="result-box" id="resultBox">
+            <div class="label"><i class="bi bi-link"></i> PANEL URL AKUN</div>
+            <div class="url" id="resultUrl">https://panel-xxxxx.vercel.app</div>
+            <button onclick="openUrl()" class="btn-success-custom"><i class="bi bi-box-arrow-up-right"></i> BUKA PANEL</button>
+            <button onclick="copyResultUrl()" class="btn-secondary-custom mt-2"><i class="bi bi-clipboard"></i> SALIN URL</button>
+        </div>
+
         <div class="footer-text">
             &copy; 2026 <strong>Create By Samil</strong>
         </div>
@@ -89,53 +135,33 @@
 
     <script>
         // ============================================================
-        // PTERODACTYL CREATE ACCOUNT - URL ACAK OTOMATIS
+        // PTERODACTYL CREATE PANEL + AUTO GENERATE URL
         // ============================================================
 
-        // ===== GENERATE URL ACAK =====
-        function generateRandomUrl() {
-            const prefix = 'panel';
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            let randomPart = '';
-            for (let i = 0; i < 6; i++) {
-                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            const domains = ['vercel.app', 'netlify.app', 'onrender.com', 'github.io', 'herokuapp.com'];
-            const domain = domains[Math.floor(Math.random() * domains.length)];
-            return `https://${prefix}-${randomPart}.${domain}`;
-        }
-
-        // ===== TAMPILKAN URL =====
-        let currentUrl = generateRandomUrl();
-        document.getElementById('panelUrlDisplay').innerText = currentUrl;
-
-        // ===== COPY URL =====
-        function copyUrl() {
-            const url = document.getElementById('panelUrlDisplay').innerText;
-            navigator.clipboard.writeText(url).then(() => {
-                showToast('URL disalin!', 'success');
-            }).catch(() => {
-                showToast('Gagal menyalin.', 'error');
-            });
-        }
-
-        // ===== TOAST =====
-        function showToast(message, type = 'info') {
-            const alert = document.getElementById('alertMessage');
-            alert.className = 'alert-custom ' + type;
-            alert.innerHTML = message;
-            alert.style.display = 'block';
-            setTimeout(() => { alert.style.display = 'none'; }, 3000);
-        }
-
-        // ===== FORM SUBMIT =====
         const form = document.getElementById('createForm');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const emailInput = document.getElementById('email');
+        const alertMsg = document.getElementById('alertMessage');
         const loading = document.getElementById('loadingIndicator');
         const createBtn = document.getElementById('createBtn');
+        const resultBox = document.getElementById('resultBox');
+        const resultUrl = document.getElementById('resultUrl');
 
+        // ===== GENERATE URL ACAK =====
+        function generateRandomUrl(username) {
+            const prefix = username ? username.toLowerCase().replace(/[^a-z0-9]/g, '') : 'panel';
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let randomPart = '';
+            for (let i = 0; i < 4; i++) {
+                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            const domains = ['vercel.app', 'netlify.app', 'onrender.com', 'herokuapp.com'];
+            const domain = domains[Math.floor(Math.random() * domains.length)];
+            return `https://${prefix}-${randomPart}.${domain}`;
+        }
+
+        // ===== FORM SUBMIT =====
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -143,45 +169,82 @@
             const password = passwordInput.value.trim();
             const email = emailInput.value.trim();
 
+            // Validasi
             if (!username || username.length < 3) {
-                showToast('Username minimal 3 karakter.', 'error');
+                showAlert('Username minimal 3 karakter.', 'error');
                 return;
             }
             if (!password || password.length < 6) {
-                showToast('Password minimal 6 karakter.', 'error');
+                showAlert('Password minimal 6 karakter.', 'error');
                 return;
             }
             if (!email || !email.includes('@')) {
-                showToast('Email tidak valid.', 'error');
+                showAlert('Email tidak valid.', 'error');
                 return;
             }
 
+            // Loading
             loading.style.display = 'block';
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> PROCESSING...';
+            hideAlert();
+            resultBox.style.display = 'none';
 
-            // Simulasi proses + generate URL baru
+            // Simulasi proses
             setTimeout(() => {
-                const success = Math.random() > 0.2;
+                const success = Math.random() > 0.15;
 
                 loading.style.display = 'none';
                 createBtn.disabled = false;
                 createBtn.innerHTML = '<i class="bi bi-plus-circle"></i> CREATE';
 
                 if (success) {
-                    // Generate URL baru
-                    currentUrl = generateRandomUrl();
-                    document.getElementById('panelUrlDisplay').innerText = currentUrl;
-                    showToast(`✅ Akun "${username}" berhasil dibuat! URL: ${currentUrl}`, 'success');
+                    // Generate URL
+                    const url = generateRandomUrl(username);
+                    resultUrl.innerText = url;
+                    resultBox.style.display = 'block';
+                    showAlert(`✅ Akun "${username}" berhasil dibuat!`, 'success');
                     usernameInput.value = '';
                     passwordInput.value = '';
                     emailInput.value = '';
                 } else {
-                    showToast('❌ Gagal membuat akun. Coba lagi.', 'error');
+                    showAlert('❌ Gagal membuat akun. Coba lagi.', 'error');
                 }
-            }, 2000);
+            }, 2500);
         });
+
+        // ===== FUNGSI BUKA URL =====
+        function openUrl() {
+            const url = resultUrl.innerText;
+            window.open(url, '_blank');
+        }
+
+        // ===== FUNGSI COPY URL =====
+        function copyResultUrl() {
+            const url = resultUrl.innerText;
+            navigator.clipboard.writeText(url).then(() => {
+                showAlert('URL disalin!', 'success');
+            }).catch(() => {
+                showAlert('Gagal menyalin.', 'error');
+            });
+        }
+
+        // ===== ALERT =====
+        function showAlert(message, type) {
+            alertMsg.className = 'alert-custom ' + type;
+            alertMsg.innerHTML = message;
+            alertMsg.style.display = 'block';
+            setTimeout(() => { alertMsg.style.display = 'none'; }, 4000);
+        }
+
+        function hideAlert() {
+            alertMsg.style.display = 'none';
+        }
+
+        usernameInput.addEventListener('input', hideAlert);
+        passwordInput.addEventListener('input', hideAlert);
+        emailInput.addEventListener('input', hideAlert);
     </script>
 
 </body>
-</html>
+    </html>
