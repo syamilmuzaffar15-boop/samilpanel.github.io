@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pterodactyl - Create Account</title>
+    <title>Pterodactyl - Create Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -30,13 +30,14 @@
         .alert-custom.error { display: block; background: #1a0a0a; border: 1px solid #ff1a1a; color: #ff4a4a; }
         .loading { display: none; text-align: center; color: #ffcc00; font-size: 14px; margin-top: 12px; }
         .loading i { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { rotate(360deg); } }
         .label-custom { color: #aa6a6a; font-weight: 500; font-size: 14px; margin-bottom: 6px; display: block; }
         .mb-3 { margin-bottom: 18px; }
-        .api-settings { background: #0a0505; border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px solid #1a0a0a; }
-        .api-settings label { color: #6a4a4a; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .api-settings input { background: #0a0505; border: 1px solid #2a1a1a; border-radius: 30px; padding: 8px 14px; color: #ff8a8a; font-size: 13px; width: 100%; margin-top: 4px; }
-        .api-settings input:focus { border-color: #ff1a1a; outline: none; }
+        .url-box { background: #0a0505; border: 1px solid #2a1a1a; border-radius: 16px; padding: 14px; margin-bottom: 16px; }
+        .url-box .label { color: #6a4a4a; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .url-box .url { color: #00ff44; font-family: monospace; font-size: 16px; word-break: break-all; margin-top: 4px; }
+        .url-box .btn-copy { background: transparent; border: 1px solid #ff1a1a; color: #ff1a1a; border-radius: 30px; padding: 2px 16px; font-size: 12px; transition: 0.3s; }
+        .url-box .btn-copy:hover { background: #ff1a1a; color: #000; }
     </style>
 </head>
 <body>
@@ -48,11 +49,13 @@
             <p>Pterodactyl Account Creator</p>
         </div>
 
-        <div class="api-settings">
-            <label><i class="bi bi-link"></i> Panel URL</label>
-            <input type="text" id="panelUrl" placeholder="https://panel.domainkamu.com" value="https://panel.domainkamu.com">
-            <label style="margin-top:10px;"><i class="bi bi-key"></i> API Key (Admin)</label>
-            <input type="password" id="apiKey" placeholder="ptlc_xxxxxxxxxxxxx">
+        <!-- URL OTOMATIS -->
+        <div class="url-box">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="label"><i class="bi bi-link"></i> PANEL URL (OTOMATIS)</span>
+                <button onclick="copyUrl()" class="btn-copy"><i class="bi bi-clipboard"></i> COPY</button>
+            </div>
+            <div class="url" id="panelUrlDisplay">https://panel-xxxxx.vercel.app</div>
         </div>
 
         <div class="alert-custom" id="alertMessage"></div>
@@ -86,127 +89,99 @@
 
     <script>
         // ============================================================
-        // PTERODACTYL CREATE ACCOUNT - READY PAKAI DOMAIN SENDIRI
+        // PTERODACTYL CREATE ACCOUNT - URL ACAK OTOMATIS
         // ============================================================
 
+        // ===== GENERATE URL ACAK =====
+        function generateRandomUrl() {
+            const prefix = 'panel';
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let randomPart = '';
+            for (let i = 0; i < 6; i++) {
+                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            const domains = ['vercel.app', 'netlify.app', 'onrender.com', 'github.io', 'herokuapp.com'];
+            const domain = domains[Math.floor(Math.random() * domains.length)];
+            return `https://${prefix}-${randomPart}.${domain}`;
+        }
+
+        // ===== TAMPILKAN URL =====
+        let currentUrl = generateRandomUrl();
+        document.getElementById('panelUrlDisplay').innerText = currentUrl;
+
+        // ===== COPY URL =====
+        function copyUrl() {
+            const url = document.getElementById('panelUrlDisplay').innerText;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('URL disalin!', 'success');
+            }).catch(() => {
+                showToast('Gagal menyalin.', 'error');
+            });
+        }
+
+        // ===== TOAST =====
+        function showToast(message, type = 'info') {
+            const alert = document.getElementById('alertMessage');
+            alert.className = 'alert-custom ' + type;
+            alert.innerHTML = message;
+            alert.style.display = 'block';
+            setTimeout(() => { alert.style.display = 'none'; }, 3000);
+        }
+
+        // ===== FORM SUBMIT =====
         const form = document.getElementById('createForm');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const emailInput = document.getElementById('email');
-        const panelUrl = document.getElementById('panelUrl');
-        const apiKey = document.getElementById('apiKey');
-        const alertMsg = document.getElementById('alertMessage');
         const loading = document.getElementById('loadingIndicator');
         const createBtn = document.getElementById('createBtn');
 
-        // ===== LOAD SETTING DARI LOCAL STORAGE =====
-        if (localStorage.getItem('panel_url')) {
-            panelUrl.value = localStorage.getItem('panel_url');
-        }
-        if (localStorage.getItem('panel_api_key')) {
-            apiKey.value = localStorage.getItem('panel_api_key');
-        }
-
-        panelUrl.addEventListener('change', function() {
-            localStorage.setItem('panel_url', this.value);
-        });
-        apiKey.addEventListener('change', function() {
-            localStorage.setItem('panel_api_key', this.value);
-        });
-
-        // ===== SUBMIT FORM =====
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
             const email = emailInput.value.trim();
-            const url = panelUrl.value.trim().replace(/\/$/, '');
-            const key = apiKey.value.trim();
 
-            // Validasi
             if (!username || username.length < 3) {
-                showAlert('Username minimal 3 karakter.', 'error');
+                showToast('Username minimal 3 karakter.', 'error');
                 return;
             }
             if (!password || password.length < 6) {
-                showAlert('Password minimal 6 karakter.', 'error');
+                showToast('Password minimal 6 karakter.', 'error');
                 return;
             }
             if (!email || !email.includes('@')) {
-                showAlert('Email tidak valid.', 'error');
-                return;
-            }
-            if (!url || !url.startsWith('https://')) {
-                showAlert('Panel URL harus HTTPS.', 'error');
-                return;
-            }
-            if (!key || !key.startsWith('ptlc_')) {
-                showAlert('API Key tidak valid. Harus dimulai dengan ptlc_', 'error');
+                showToast('Email tidak valid.', 'error');
                 return;
             }
 
-            // Loading
             loading.style.display = 'block';
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> PROCESSING...';
-            hideAlert();
 
-            try {
-                const response = await fetch(`${url}/api/application/users`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${key}`,
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password,
-                        email: email,
-                        first_name: username,
-                        last_name: 'User'
-                    })
-                });
-
-                const data = await response.json();
+            // Simulasi proses + generate URL baru
+            setTimeout(() => {
+                const success = Math.random() > 0.2;
 
                 loading.style.display = 'none';
                 createBtn.disabled = false;
                 createBtn.innerHTML = '<i class="bi bi-plus-circle"></i> CREATE';
 
-                if (response.ok && data.attributes) {
-                    showAlert(`✅ Akun "${username}" berhasil dibuat! ID: ${data.attributes.id}`, 'success');
+                if (success) {
+                    // Generate URL baru
+                    currentUrl = generateRandomUrl();
+                    document.getElementById('panelUrlDisplay').innerText = currentUrl;
+                    showToast(`✅ Akun "${username}" berhasil dibuat! URL: ${currentUrl}`, 'success');
                     usernameInput.value = '';
                     passwordInput.value = '';
                     emailInput.value = '';
                 } else {
-                    const errors = data.errors?.map(e => e.detail).join(', ') || 'Gagal membuat akun.';
-                    showAlert(`❌ ${errors}`, 'error');
+                    showToast('❌ Gagal membuat akun. Coba lagi.', 'error');
                 }
-            } catch (error) {
-                loading.style.display = 'none';
-                createBtn.disabled = false;
-                createBtn.innerHTML = '<i class="bi bi-plus-circle"></i> CREATE';
-                showAlert(`❌ Error: ${error.message} — Pastikan panel URL benar dan API key valid.`, 'error');
-            }
+            }, 2000);
         });
-
-        // ===== FUNGSI ALERT =====
-        function showAlert(message, type) {
-            alertMsg.className = 'alert-custom ' + type;
-            alertMsg.innerHTML = message;
-            alertMsg.style.display = 'block';
-        }
-
-        function hideAlert() {
-            alertMsg.style.display = 'none';
-        }
-
-        usernameInput.addEventListener('input', hideAlert);
-        passwordInput.addEventListener('input', hideAlert);
-        emailInput.addEventListener('input', hideAlert);
     </script>
 
 </body>
-  </html>
+</html>
