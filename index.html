@@ -85,7 +85,7 @@
 
         <div class="result-box" id="resultBox">
             <div class="label"><i class="bi bi-link"></i> PANEL URL AKUN</div>
-            <div class="url" id="resultUrl">https://panel-xxxxx.vercel.app</div>
+            <div class="url" id="resultUrl">https://syamilmuzaffar15-boop.github.io/samilpanel.github.io/panel.html</div>
             <button onclick="openUrl()" class="btn-success-custom"><i class="bi bi-box-arrow-up-right"></i> BUKA PANEL</button>
             <button onclick="copyResultUrl()" class="btn-secondary-custom mt-2"><i class="bi bi-clipboard"></i> SALIN URL</button>
         </div>
@@ -96,6 +96,10 @@
     </div>
 
     <script>
+        // ============================================================
+        // INDEX.HTML - CREATE ACCOUNT + SAVE TO LOCALSTORAGE
+        // ============================================================
+
         const form = document.getElementById('createForm');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
@@ -106,26 +110,10 @@
         const resultBox = document.getElementById('resultBox');
         const resultUrl = document.getElementById('resultUrl');
 
-        function generateRandomUrl(username) {
-            const prefix = username ? username.toLowerCase().replace(/[^a-z0-9]/g, '') : 'panel';
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            let randomPart = '';
-            for (let i = 0; i < 4; i++) {
-                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            // Auto-detect platform
-            const host = window.location.hostname;
-            if (host.includes('vercel.app') || host.includes('netlify.app') || host.includes('onrender.com')) {
-                return `https://${prefix}-${randomPart}.${host.split('.').slice(1).join('.')}/panel.html`;
-            } else if (host.includes('github.io')) {
-                return `https://${host}/panel.html`;
-            } else {
-                return `https://${prefix}-${randomPart}.vercel.app/panel.html`;
-            }
-        }
-
+        // ===== REGISTER =====
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
             const email = emailInput.value.trim();
@@ -143,6 +131,25 @@
                 return;
             }
 
+            // ===== CEK APAKAH USERNAME SUDAH TERDAFTAR =====
+            const users = JSON.parse(localStorage.getItem('pterodactyl_users')) || [];
+            if (users.find(u => u.username === username)) {
+                showAlert('❌ Username "' + username + '" sudah terdaftar!', 'error');
+                return;
+            }
+
+            // ===== SIMPAN USER =====
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                password: password,
+                email: email,
+                created: new Date().toISOString()
+            };
+            users.push(newUser);
+            localStorage.setItem('pterodactyl_users', JSON.stringify(users));
+
+            // ===== TAMPILKAN URL =====
             loading.style.display = 'block';
             createBtn.disabled = true;
             createBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> PROCESSING...';
@@ -150,30 +157,27 @@
             resultBox.style.display = 'none';
 
             setTimeout(() => {
-                const success = Math.random() > 0.15;
                 loading.style.display = 'none';
                 createBtn.disabled = false;
                 createBtn.innerHTML = '<i class="bi bi-plus-circle"></i> CREATE';
 
-                if (success) {
-                    const url = generateRandomUrl(username);
-                    resultUrl.innerText = url;
-                    resultBox.style.display = 'block';
-                    showAlert(`✅ Akun "${username}" berhasil dibuat!`, 'success');
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    emailInput.value = '';
-                } else {
-                    showAlert('❌ Gagal membuat akun. Coba lagi.', 'error');
-                }
-            }, 2500);
+                const url = 'https://syamilmuzaffar15-boop.github.io/samilpanel.github.io/panel.html';
+                resultUrl.innerText = url;
+                resultBox.style.display = 'block';
+                showAlert('✅ Akun "' + username + '" berhasil dibuat!', 'success');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                emailInput.value = '';
+            }, 1500);
         });
 
+        // ===== FUNGSI BUKA URL =====
         function openUrl() {
             const url = resultUrl.innerText;
             window.open(url, '_blank');
         }
 
+        // ===== FUNGSI COPY URL =====
         function copyResultUrl() {
             const url = resultUrl.innerText;
             navigator.clipboard.writeText(url).then(() => {
@@ -183,6 +187,7 @@
             });
         }
 
+        // ===== FUNGSI ALERT =====
         function showAlert(message, type) {
             alertMsg.className = 'alert-custom ' + type;
             alertMsg.innerHTML = message;
