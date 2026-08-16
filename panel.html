@@ -13,7 +13,6 @@
         ::-webkit-scrollbar-track { background: #141414; }
         ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
 
-        /* ===== LOGIN ===== */
         .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a0a; padding: 20px; }
         .login-card { background: #1a0a0a; border: 1px solid #3a1a1a; border-radius: 32px; padding: 40px 30px; max-width: 400px; width: 100%; box-shadow: 0 20px 60px rgba(255,0,0,0.05); }
         .login-card .logo { text-align: center; margin-bottom: 28px; }
@@ -32,7 +31,6 @@
         .login-card .footer-text { text-align: center; color: #4a3a3a; font-size: 13px; margin-top: 24px; border-top: 1px solid #1a0a0a; padding-top: 20px; }
         .login-card .footer-text strong { color: #ff1a1a; }
 
-        /* ===== DASHBOARD ===== */
         .dashboard { display: none; }
         .navbar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 12px 20px; }
         .navbar-brand { color: #ff4a4a !important; font-weight: 700; font-size: 20px; }
@@ -57,6 +55,8 @@
         .btn-outline-pterodactyl:hover { background: #ff1a1a; color: #000; }
         .btn-danger-pterodactyl { background: #b04040; border: none; border-radius: 40px; padding: 6px 16px; color: #fff; font-weight: 600; font-size: 13px; transition: 0.3s; }
         .btn-danger-pterodactyl:hover { background: #8a3030; transform: scale(1.05); }
+        .btn-sm-pterodactyl { background: #2a2a2a; border: none; border-radius: 40px; padding: 4px 14px; color: #e0e0e0; font-size: 12px; transition: 0.3s; }
+        .btn-sm-pterodactyl:hover { background: #3a3a3a; }
         .footer-text { text-align: center; color: #4a3a3a; font-size: 13px; padding: 20px 0; border-top: 1px solid #1a0a0a; margin-top: 20px; }
         .footer-text strong { color: #ff1a1a; }
         .page-content { display: none; animation: fadeIn 0.3s ease; }
@@ -66,11 +66,37 @@
         .user-table { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; overflow: hidden; }
         .user-table th { background: #141414; color: #8a8a8a; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; padding: 12px 16px; border-bottom: 1px solid #2a2a2a; }
         .user-table td { padding: 12px 16px; border-bottom: 1px solid #1a1a1a; color: #e0e0e0; }
-        .user-table tr:hover td { background: #1a0a0a; }
-
         .settings-group { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .settings-group .label { color: #8a8a8a; font-size: 13px; font-weight: 500; }
         .settings-group .value { color: #fff; }
+
+        /* FILE MANAGER */
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #0a0505; border-radius: 8px; margin-bottom: 4px; border: 1px solid #1a1a1a; }
+        .file-item .name { color: #e0e0e0; font-size: 14px; }
+        .file-item .name i { margin-right: 8px; color: #ffcc00; }
+        .file-item .size { color: #6a6a6a; font-size: 12px; }
+        .file-item .actions button { background: transparent; border: none; color: #6a6a6a; padding: 0 8px; transition: 0.3s; }
+        .file-item .actions button:hover { color: #ff1a1a; }
+
+        /* TERMINAL */
+        .terminal {
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #00ff44;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .terminal .line { margin-bottom: 4px; }
+        .terminal .line .prompt { color: #ff1a1a; }
+        .terminal .line .cmd { color: #fff; }
+        .terminal .line .output { color: #8a8a8a; }
+        .terminal-input { background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 40px; padding: 10px 18px; color: #00ff44; font-family: 'Courier New', monospace; font-size: 14px; width: 100%; }
+        .terminal-input:focus { outline: none; border-color: #ff1a1a; }
 
         @media (max-width: 768px) {
             .sidebar { min-height: auto; border-right: none; border-bottom: 1px solid #2a2a2a; }
@@ -79,9 +105,7 @@
 </head>
 <body>
 
-    <!-- ========================================================= -->
-    <!-- LOGIN PAGE -->
-    <!-- ========================================================= -->
+    <!-- ===== LOGIN ===== -->
     <div class="login-page" id="loginPage">
         <div class="login-card">
             <div class="logo">
@@ -105,12 +129,8 @@
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- DASHBOARD -->
-    <!-- ========================================================= -->
+    <!-- ===== DASHBOARD ===== -->
     <div class="dashboard" id="dashboardPage">
-
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><i class="bi bi-server"></i> Pterodactyl</a>
@@ -137,7 +157,7 @@
                 <!-- CONTENT -->
                 <div class="col-md-10 p-4">
 
-                    <!-- ===== PAGE: DASHBOARD ===== -->
+                    <!-- ===== DASHBOARD ===== -->
                     <div class="page-content active" id="page-dashboard">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 style="color: #fff; font-weight: 600;">Dashboard</h4>
@@ -151,66 +171,122 @@
                         </div>
                         <h5 style="color: #fff; font-weight: 600; margin-top: 20px;">Servers</h5>
                         <div class="row">
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Minecraft</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-minecraft.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 25% | RAM: 1.2GB</div></div></div>
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Web Server</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-web.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 8% | RAM: 512MB</div></div></div>
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Discord Bot</span><span class="status offline">● Offline</span></div><div style="font-size:13px;color:#8a8a8a;">srv-discord.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 0% | RAM: 0MB</div></div></div>
+                            <div class="col-md-4"><div class="server-card" onclick="navigateToServer('Minecraft')"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Minecraft</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-minecraft.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 25% | RAM: 1.2GB</div></div></div>
+                            <div class="col-md-4"><div class="server-card" onclick="navigateToServer('Web Server')"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Web Server</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-web.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 8% | RAM: 512MB</div></div></div>
+                            <div class="col-md-4"><div class="server-card" onclick="navigateToServer('Discord Bot')"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Discord Bot</span><span class="status offline">● Offline</span></div><div style="font-size:13px;color:#8a8a8a;">srv-discord.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 0% | RAM: 0MB</div></div></div>
                         </div>
                     </div>
 
-                    <!-- ===== PAGE: SERVERS ===== -->
+                    <!-- ===== SERVERS ===== -->
                     <div class="page-content" id="page-servers">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 style="color: #fff; font-weight: 600;">Servers</h4>
                             <button class="btn btn-pterodactyl" onclick="showToast('Server created!','success')"><i class="bi bi-plus-circle"></i> New Server</button>
                         </div>
                         <div class="row">
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Minecraft</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-minecraft.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 25% | RAM: 1.2GB</div><button class="btn btn-danger-pterodactyl mt-2" onclick="showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button></div></div>
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Web Server</span><span class="status online">● Online</span></div><div style="font-size:13px;color:#8a8a8a;">srv-web.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 8% | RAM: 512MB</div><button class="btn btn-danger-pterodactyl mt-2" onclick="showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button></div></div>
-                            <div class="col-md-4"><div class="server-card"><div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Discord Bot</span><span class="status offline">● Offline</span></div><div style="font-size:13px;color:#8a8a8a;">srv-discord.pterodactyl.io</div><div style="font-size:12px;color:#4a4a4a;">CPU: 0% | RAM: 0MB</div><button class="btn btn-danger-pterodactyl mt-2" onclick="showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button></div></div>
+                            <div class="col-md-6">
+                                <div class="server-card" onclick="navigateToServer('Minecraft')">
+                                    <div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Minecraft</span><span class="status online">● Online</span></div>
+                                    <div style="font-size:13px;color:#8a8a8a;">srv-minecraft.pterodactyl.io</div>
+                                    <div style="font-size:12px;color:#4a4a4a;">CPU: 25% | RAM: 1.2GB</div>
+                                    <button class="btn btn-danger-pterodactyl mt-2" onclick="event.stopPropagation();showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="server-card" onclick="navigateToServer('Web Server')">
+                                    <div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Web Server</span><span class="status online">● Online</span></div>
+                                    <div style="font-size:13px;color:#8a8a8a;">srv-web.pterodactyl.io</div>
+                                    <div style="font-size:12px;color:#4a4a4a;">CPU: 8% | RAM: 512MB</div>
+                                    <button class="btn btn-danger-pterodactyl mt-2" onclick="event.stopPropagation();showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="server-card" onclick="navigateToServer('Discord Bot')">
+                                    <div class="d-flex justify-content-between"><span class="name"><i class="bi bi-hdd"></i> Discord Bot</span><span class="status offline">● Offline</span></div>
+                                    <div style="font-size:13px;color:#8a8a8a;">srv-discord.pterodactyl.io</div>
+                                    <div style="font-size:12px;color:#4a4a4a;">CPU: 0% | RAM: 0MB</div>
+                                    <button class="btn btn-danger-pterodactyl mt-2" onclick="event.stopPropagation();showToast('Server deleted!','danger')"><i class="bi bi-trash"></i> Delete</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ===== PAGE: USERS ===== -->
+                    <!-- ===== USERS (Only Self) ===== -->
                     <div class="page-content" id="page-users">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 style="color: #fff; font-weight: 600;">Users</h4>
-                            <button class="btn btn-pterodactyl" onclick="showToast('User created!','success')"><i class="bi bi-plus-circle"></i> New User</button>
-                        </div>
+                        <h4 style="color: #fff; font-weight: 600; margin-bottom: 20px;">My Account</h4>
                         <div class="user-table" id="userTableContainer">
                             <table class="table table-dark table-hover" style="margin:0;background:transparent;">
-                                <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Created</th><th>Action</th></tr></thead>
+                                <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Created</th></tr></thead>
                                 <tbody id="userTableBody"></tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- ===== PAGE: SETTINGS ===== -->
+                    <!-- ===== SETTINGS ===== -->
                     <div class="page-content" id="page-settings">
                         <h4 style="color: #fff; font-weight: 600; margin-bottom: 20px;">Settings</h4>
                         <div class="settings-group"><div class="label">Panel Name</div><div class="value">Pterodactyl Panel</div></div>
                         <div class="settings-group"><div class="label">Theme</div><div class="value">Dark (Red)</div></div>
                         <div class="settings-group"><div class="label">Default Language</div><div class="value">Indonesian</div></div>
-                        <div class="settings-group"><div class="label">Registration</div><div class="value">Enabled</div></div>
                         <button class="btn btn-pterodactyl mt-2" onclick="showToast('Settings saved!','success')"><i class="bi bi-save"></i> Save Settings</button>
                     </div>
 
-                    <!-- ===== PAGE: LOGS ===== -->
+                    <!-- ===== LOGS ===== -->
                     <div class="page-content" id="page-logs">
                         <h4 style="color: #fff; font-weight: 600; margin-bottom: 20px;">Activity Logs</h4>
-                        <div class="settings-group"><div style="color:#8a8a8a;font-size:13px;">[2026-08-16 10:30] User samil logged in</div></div>
+                        <div class="settings-group"><div style="color:#8a8a8a;font-size:13px;">[2026-08-16 10:30] User logged in</div></div>
                         <div class="settings-group"><div style="color:#8a8a8a;font-size:13px;">[2026-08-16 10:25] New server created: Minecraft</div></div>
-                        <div class="settings-group"><div style="color:#8a8a8a;font-size:13px;">[2026-08-16 10:15] User admin updated settings</div></div>
-                        <div class="settings-group"><div style="color:#8a8a8a;font-size:13px;">[2026-08-16 10:00] User test registered</div></div>
                         <button class="btn btn-danger-pterodactyl mt-2" onclick="showToast('Logs cleared!','danger')"><i class="bi bi-trash"></i> Clear Logs</button>
                     </div>
 
-                    <!-- ===== PAGE: HELP ===== -->
+                    <!-- ===== HELP ===== -->
                     <div class="page-content" id="page-help">
                         <h4 style="color: #fff; font-weight: 600; margin-bottom: 20px;">Help & Documentation</h4>
                         <div class="settings-group"><div class="label">📖 Documentation</div><div class="value"><a href="#" style="color:#ff1a1a;text-decoration:none;">https://pterodactyl.io/docs</a></div></div>
                         <div class="settings-group"><div class="label">💬 Discord</div><div class="value"><a href="#" style="color:#ff1a1a;text-decoration:none;">https://discord.gg/pterodactyl</a></div></div>
-                        <div class="settings-group"><div class="label">🐛 Report Issue</div><div class="value"><a href="#" style="color:#ff1a1a;text-decoration:none;">https://github.com/pterodactyl/panel/issues</a></div></div>
-                        <div class="settings-group"><div class="label">📧 Support Email</div><div class="value">support@pterodactyl.io</div></div>
+                    </div>
+
+                    <!-- ===== SERVER DETAIL (Hidden by default) ===== -->
+                    <div class="page-content" id="page-server-detail">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 style="color: #fff; font-weight: 600;" id="serverDetailTitle">Server: Minecraft</h4>
+                            <button class="btn btn-outline-pterodactyl btn-sm" onclick="showPage('servers')"><i class="bi bi-arrow-left"></i> Back</button>
+                        </div>
+
+                        <!-- File Manager -->
+                        <h5 style="color: #fff; font-weight: 600; margin-top: 16px;">File Manager</h5>
+                        <div class="settings-group" id="fileManager">
+                            <div class="file-item"><span class="name"><i class="bi bi-folder"></i> node_modules</span><span class="size">12.4 MB</span><span class="actions"><button onclick="showToast('Folder opened','info')"><i class="bi bi-folder2-open"></i></button><button onclick="showToast('Deleted!','danger')"><i class="bi bi-trash"></i></button></span></div>
+                            <div class="file-item"><span class="name"><i class="bi bi-file-code"></i> index.js</span><span class="size">2.1 KB</span><span class="actions"><button onclick="showToast('Downloading...','info')"><i class="bi bi-download"></i></button><button onclick="showToast('Deleted!','danger')"><i class="bi bi-trash"></i></button></span></div>
+                            <div class="file-item"><span class="name"><i class="bi bi-file-json"></i> package.json</span><span class="size">1.8 KB</span><span class="actions"><button onclick="showToast('Downloading...','info')"><i class="bi bi-download"></i></button><button onclick="showToast('Deleted!','danger')"><i class="bi bi-trash"></i></button></span></div>
+                            <div class="file-item"><span class="name"><i class="bi bi-file-lock"></i> .env</span><span class="size">0.4 KB</span><span class="actions"><button onclick="showToast('Downloading...','info')"><i class="bi bi-download"></i></button><button onclick="showToast('Deleted!','danger')"><i class="bi bi-trash"></i></button></span></div>
+                            <div class="mt-2">
+                                <input type="file" id="fileUpload" style="display:none;" onchange="uploadFile()">
+                                <button class="btn btn-sm-pterodactyl" onclick="document.getElementById('fileUpload').click()"><i class="bi bi-upload"></i> Upload File</button>
+                                <button class="btn btn-sm-pterodactyl" onclick="showToast('New folder created!','success')"><i class="bi bi-folder-plus"></i> New Folder</button>
+                            </div>
+                        </div>
+
+                        <!-- Terminal -->
+                        <h5 style="color: #fff; font-weight: 600; margin-top: 20px;">Terminal</h5>
+                        <div class="terminal" id="terminalOutput">
+                            <div class="line"><span class="prompt">$ </span><span class="cmd">node -v</span></div>
+                            <div class="line"><span class="output">v18.17.0</span></div>
+                            <div class="line"><span class="prompt">$ </span><span class="cmd">npm -v</span></div>
+                            <div class="line"><span class="output">9.6.7</span></div>
+                            <div class="line"><span class="prompt">$ </span><span class="cmd">ls -la</span></div>
+                            <div class="line"><span class="output">total 24</span></div>
+                            <div class="line"><span class="output">drwxr-xr-x 1 user user  4096 Aug 16 10:30 .</span></div>
+                            <div class="line"><span class="output">drwxr-xr-x 1 user user  4096 Aug 16 10:25 ..</span></div>
+                            <div class="line"><span class="output">-rw-r--r-- 1 user user  2150 Aug 16 10:28 index.js</span></div>
+                            <div class="line"><span class="output">-rw-r--r-- 1 user user  1843 Aug 16 10:27 package.json</span></div>
+                            <div class="line"><span class="output">drwxr-xr-x 1 user user  4096 Aug 16 10:30 node_modules</span></div>
+                            <div class="line" id="terminalLastLine"><span class="prompt">$ </span><span class="cmd" style="color:#ffcc00;">_</span></div>
+                        </div>
+                        <div class="mt-2 d-flex gap-2">
+                            <input type="text" id="terminalInput" class="terminal-input" placeholder="Ketik perintah... (node, npm, ls, mkdir, echo, cat, rm)" onkeydown="if(event.key==='Enter'){runCommand(this.value);this.value='';}">
+                            <button class="btn btn-pterodactyl" onclick="const inp=document.getElementById('terminalInput');runCommand(inp.value);inp.value='';">Run</button>
+                        </div>
                     </div>
 
                     <div class="footer-text">&copy; 2026 <strong>Pterodactyl</strong> — Panel by Samil</div>
@@ -219,7 +295,7 @@
         </div>
     </div>
 
-    <!-- ===== TOAST NOTIFICATION ===== -->
+    <!-- TOAST -->
     <div style="position:fixed;bottom:20px;right:20px;z-index:9999;max-width:320px;" id="toastContainer"></div>
 
     <script>
@@ -227,13 +303,13 @@
         // PANEL.HTML - FULL FUNCTIONAL
         // ============================================================
 
-        // ===== CEK SESSION =====
+        // ===== SESSION =====
         const currentUser = JSON.parse(localStorage.getItem('pterodactyl_session'));
         if (currentUser) {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
             document.getElementById('displayUsername').innerText = currentUser.username;
-            renderUsers();
+            renderSelfUser();
         }
 
         // ===== LOGIN =====
@@ -266,39 +342,130 @@
                 document.querySelectorAll('.sidebar .menu-item').forEach(el => el.classList.remove('active'));
                 this.classList.add('active');
                 const page = this.dataset.page;
-                document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-                const target = document.getElementById('page-' + page);
-                if (target) target.classList.add('active');
+                showPage(page);
             });
         });
 
-        // ===== RENDER USER TABLE =====
-        function renderUsers() {
+        function showPage(page) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+            // Reset sidebar highlight
+            document.querySelectorAll('.sidebar .menu-item').forEach(el => el.classList.remove('active'));
+            const menuItem = document.querySelector(`.sidebar .menu-item[data-page="${page}"]`);
+            if (menuItem) menuItem.classList.add('active');
+        }
+
+        // ===== NAVIGATE TO SERVER =====
+        function navigateToServer(name) {
+            document.getElementById('serverDetailTitle').innerText = 'Server: ' + name;
+            showPage('server-detail');
+            // Highlight servers di sidebar
+            document.querySelectorAll('.sidebar .menu-item').forEach(el => el.classList.remove('active'));
+            document.querySelector('.sidebar .menu-item[data-page="servers"]').classList.add('active');
+        }
+
+        // ===== USERS — ONLY SELF =====
+        function renderSelfUser() {
             const users = JSON.parse(localStorage.getItem('pterodactyl_users')) || [];
+            const current = JSON.parse(localStorage.getItem('pterodactyl_session'));
+            const self = users.find(u => u.id === current.id);
             const tbody = document.getElementById('userTableBody');
             tbody.innerHTML = '';
-            users.forEach(u => {
+            if (self) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${u.id}</td>
-                    <td>${u.username}</td>
-                    <td>${u.email}</td>
-                    <td>${new Date(u.created).toLocaleDateString()}</td>
-                    <td><button class="btn btn-danger-pterodactyl btn-sm" onclick="deleteUser(${u.id})"><i class="bi bi-trash"></i></button></td>
+                    <td>${self.id}</td>
+                    <td>${self.username}</td>
+                    <td>${self.email}</td>
+                    <td>${new Date(self.created).toLocaleDateString()}</td>
                 `;
                 tbody.appendChild(tr);
-            });
+            }
             document.getElementById('totalUsers').innerText = users.length;
         }
 
-        // ===== DELETE USER =====
-        function deleteUser(id) {
-            if (!confirm('Hapus user ini?')) return;
-            let users = JSON.parse(localStorage.getItem('pterodactyl_users')) || [];
-            users = users.filter(u => u.id !== id);
-            localStorage.setItem('pterodactyl_users', JSON.stringify(users));
-            renderUsers();
-            showToast('User deleted!', 'danger');
+        // ===== FILE UPLOAD =====
+        function uploadFile() {
+            const fileInput = document.getElementById('fileUpload');
+            if (fileInput.files.length > 0) {
+                showToast('File ' + fileInput.files[0].name + ' uploaded!', 'success');
+                fileInput.value = '';
+            }
+        }
+
+        // ===== TERMINAL =====
+        function runCommand(cmd) {
+            const terminal = document.getElementById('terminalOutput');
+            const lastLine = document.getElementById('terminalLastLine');
+            
+            // Hapus underscore
+            if (lastLine) {
+                const promptSpan = lastLine.querySelector('.prompt');
+                const cmdSpan = lastLine.querySelector('.cmd');
+                if (cmdSpan) cmdSpan.innerText = cmd;
+                else lastLine.innerHTML = `<span class="prompt">$ </span><span class="cmd">${cmd}</span>`;
+            }
+
+            // Output
+            const output = document.createElement('div');
+            output.className = 'line';
+            const outputText = getCommandOutput(cmd);
+            output.innerHTML = `<span class="output">${outputText}</span>`;
+            terminal.appendChild(output);
+
+            // New prompt
+            const newLine = document.createElement('div');
+            newLine.className = 'line';
+            newLine.id = 'terminalLastLine';
+            newLine.innerHTML = `<span class="prompt">$ </span><span class="cmd" style="color:#ffcc00;">_</span>`;
+            terminal.appendChild(newLine);
+
+            // Scroll to bottom
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function getCommandOutput(cmd) {
+            const lower = cmd.toLowerCase().trim();
+            if (lower === 'node -v') return 'v18.17.0';
+            if (lower === 'npm -v') return '9.6.7';
+            if (lower === 'ls' || lower === 'ls -la' || lower === 'dir') {
+                return 'index.js  package.json  node_modules  .env';
+            }
+            if (lower === 'pwd') return '/home/user/server';
+            if (lower === 'whoami') return 'user';
+            if (lower === 'date') return new Date().toString();
+            if (lower.startsWith('mkdir ')) {
+                const folder = lower.replace('mkdir ', '');
+                return `✅ Folder '${folder}' created.`;
+            }
+            if (lower.startsWith('echo ')) {
+                const text = lower.replace('echo ', '');
+                return text;
+            }
+            if (lower.startsWith('cat ')) {
+                const file = lower.replace('cat ', '');
+                if (file === 'index.js') return 'console.log("Hello World!");';
+                if (file === 'package.json') return '{"name":"server","version":"1.0.0","dependencies":{"express":"^4.18.2"}}';
+                if (file === '.env') return 'PORT=3000\nNODE_ENV=production';
+                return `❌ File '${file}' not found.`;
+            }
+            if (lower === 'npm install' || lower === 'npm i') {
+                return '✅ Installing packages...\n✅ 52 packages installed in 2.3s';
+            }
+            if (lower === 'node index.js' || lower === 'node index') {
+                return '✅ Server running at http://localhost:3000';
+            }
+            if (lower === 'clear' || lower === 'cls') {
+                document.querySelectorAll('.terminal .line:not(:last-child)').forEach(el => {
+                    if (el.id !== 'terminalLastLine') el.remove();
+                });
+                return '';
+            }
+            if (lower === 'help') {
+                return 'Commands: node -v, npm -v, ls, pwd, whoami, date, mkdir <name>, echo <text>, cat <file>, npm install, node index.js, clear, help';
+            }
+            return `❌ Command not found: '${cmd}' (type 'help' for available commands)`;
         }
 
         // ===== TOAST =====
@@ -325,4 +492,4 @@
     </script>
 
 </body>
-    </html>
+                                                                                                                                                                                                             </html>
